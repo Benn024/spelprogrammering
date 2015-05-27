@@ -1,0 +1,111 @@
+<script src="simple.js">
+
+    var pos = {x: 0, y: -100};
+    
+    var anka = {x: 480 + random(960),
+        y: totalHeight - 120,
+        xSpeed: random(-7, 7),
+        ySpeed: random(12, 16)};
+    console.log(anka.ySpeed);
+
+    var points = 0;
+
+    var missed = 0;
+
+    var skott = 2;
+    var loaded = true;
+    
+    var feather = false;
+
+    hideMouse();
+
+    function update() {
+        clearScreen();
+
+        fill("#62B2F4");
+
+        //poäng
+        text(totalWidth - 470, 60, 20, "Antal ankor skjutna:", "white");
+        text(totalWidth - 150, 75, 60, points, "white");
+        text(50, 60, 20, "Missade ankor:", "white");
+
+        anka.x = anka.x + anka.xSpeed;
+        anka.y = anka.y - anka.ySpeed;
+
+        picture(anka.x, anka.y, "anka-liten.png");
+
+        picture(pos.x, pos.y, "dh-bakgrund.png");
+
+        for (var i = 0; i < skott; i++) {
+            picture(-32 + i * 50, 60, "shotgunshell.png");
+        }
+        ;
+
+        rectangle(mouse.x - 2.5, mouse.y - 25, 5, 50, "red");
+        rectangle(mouse.x - 25, mouse.y - 2.5, 50, 5, "red");
+
+        var d = distance(mouse.x, mouse.y, anka.x + 35, anka.y + 25);
+
+        
+        if (mouse.left && loaded && skott > 0) {
+            if (d < 40) {
+//                var featherposX = anka.x;
+//                var featherposY = anka.y;
+//                
+//                setTimeout(function(){
+//                    feather = true;
+//                    while(feather === true){
+//                        picture(featherposX, featherposY, "feather.png");
+//                    }
+//                }, 1500);
+                
+                console.log(anka.ySpeed);
+                anka.x = 480 + random(960);
+                anka.y = totalHeight - 120;
+                anka.xSpeed = random(-7, 7);
+                anka.ySpeed = random(12, 16);
+                
+                points++;
+            }
+            skott--;
+            loaded = false;
+            
+            setTimeout(function(){
+                loaded = true;
+            },500);
+            
+            if(skott === 0){
+                setTimeout(function(){
+                    skott = 2;
+                }, 1500);
+            }
+            
+        }
+
+        if (anka.x < -60 || anka.x > totalWidth + 60 || anka.y < -60) {
+            anka.x = 480 + random(960);
+            anka.y = totalHeight - 120;
+            anka.xSpeed = random(-7, 7);
+            anka.ySpeed = random(12, 16);
+
+            missed++;
+
+
+        }
+
+        for (var i = 0; i < missed; i++) {
+            picture(280 + i * 100, 15, "anka-missed.png");
+        }
+        ;
+
+        if (missed === 3) {
+            stopUpdate();
+            alert("Game over! Du sköt " + points + " ankor.");
+            showMouse();
+        }
+        ;
+
+
+    }
+
+</script>

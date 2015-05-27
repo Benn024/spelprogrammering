@@ -1,0 +1,87 @@
+<script src="simple.js">
+  
+  //var för spelare
+  var player1 = { x: 10, y: 200};
+  var player2 = { x: totalWidth-20, y: 200};
+  
+  // var för boll
+  var ball = {x: totalWidth/2-5,
+              y: totalHeight/2-5,
+              xSpeed:  4,
+              ySpeed:  Math.floor((Math.random() * 10) + 1)};
+  
+  // var för score.player1
+  var p1Score = 0;
+  
+  // var för score.player2
+  var p2Score = 0;
+  
+  function update()
+  {
+  
+    fill("black");
+    rectangle(0, 0, totalWidth, 10, "white");
+    rectangle(0, totalHeight-10, totalWidth, 10, "white");
+    rectangle(totalWidth/2-2.5, 0, 5, totalHeight, "white");
+    circle(totalWidth/2, totalHeight/2, 80, "white");
+    circle(totalWidth/2, totalHeight/2, 75, "black");
+    
+    // spelarna
+    rectangle(player1.x, player1.y, 10, 80, "white");
+    rectangle(player2.x, player2.y, 10, 80, "white");
+  
+    // bollen
+    rectangle(ball.x, ball.y, 10, 10, "white");
+    
+    //poäng
+    text(200, 130, 80, p1Score, "white");
+    text(totalWidth-280, 130, 80, p2Score, "white");
+    
+    
+    // stutsar på under kant
+    if (ball.y > totalHeight-10){ball.ySpeed = -ball.ySpeed;}
+    
+    // stutsar på ovan kant
+    if (ball.y < 0) {ball.ySpeed = -ball.ySpeed;}
+    
+    // stutsar på höger kant
+    if (ball.x > totalWidth-30 && 
+        ball.y > player2.y &&
+        ball.y < player2.y+80
+       ) { ball.xSpeed += 2; ball.xSpeed = -ball.xSpeed;}       
+    
+    // om utanför lägg bollen i mitten
+    else if (ball.x > totalWidth-30){ball.x = totalWidth/2-5; p1Score++; ball.xSpeed = 4; ball.ySpeed = Math.floor((Math.random() * 10) + 1);}
+    
+    // stutsar på vänster kant
+    if(ball.x < 20 &&
+       ball.y > player1.y &&
+       ball.y < player1.y+80
+      ) { ball.xSpeed -= 2; ball.xSpeed = -ball.xSpeed;}
+    
+    else if (ball.x < 20){ball.x = totalWidth/2-5; p2Score++; ball.xSpeed = 4; ball.ySpeed = Math.floor((Math.random() * 10) + 1);}
+    
+    // styr player1 
+    if (keyboard.w) {player1.y -= 20;}
+    if (keyboard.s) {player1.y += 20;}
+    
+    // stytr player2
+    if (keyboard.up) {player2.y -= 20;}
+    if (keyboard.down) {player2.y += 20;}
+    
+    // bollen
+    ball.x += ball.xSpeed;
+    ball.y += ball.ySpeed;
+    
+    //avsluta spel
+    if(p1Score === 11){
+      alert("Grattis spelare 1, du har vunnit");
+      stopUpdate();
+    }
+    if(p2Score === 11){
+      alert("Grattis spelare 2, du har vunnit");
+      stopUpdate();
+    }
+    
+  }
+</script>
